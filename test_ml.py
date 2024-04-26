@@ -1,28 +1,43 @@
+import os
+
+from numpy import load
+
 import pytest
-# TODO: add necessary import
 
-# TODO: implement the first test. Change the function name and input as needed
-def test_one():
+import pandas as pd
+
+import sklearn
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from ml.data import process_data
+from ml.model import load_model, train_model
+
+project_path = "../Deploying-a-Scalable-ML-Pipeline-with-FastAPI"
+data = pd.read_csv(os.path.join(project_path, "data", "census.csv"))
+train, test = train_test_split(data, test_size=0.25)
+
+# 
+def test_RF_model():
     """
-    # add description for the first test
+    # Determine if the created model is a Random Forest Classifier as expected
     """
-    # Your code here
-    pass
+    rf_model = load_model(os.path.join(project_path, "model", "model.pkl"))
+    assert isinstance(rf_model, sklearn.ensemble._forest.RandomForestClassifier)
 
 
-# TODO: implement the second test. Change the function name and input as needed
-def test_two():
+# 
+def test_training_testing_datatype():
     """
-    # add description for the second test
+    # Check that the training and testing datasets have the correct datatype (Dataframe)
     """
-    # Your code here
-    pass
+    assert isinstance(train, pd.DataFrame)
+    assert isinstance(test, pd.DataFrame)
 
 
-# TODO: implement the third test. Change the function name and input as needed
-def test_three():
+# 
+def test_dataset_sizes():
     """
-    # add description for the third test
+    # Test row count for training and testing datasets against expected
     """
-    # Your code here
-    pass
+    assert train.shape[0] == 24420
+    assert test.shape[0] == 8141
