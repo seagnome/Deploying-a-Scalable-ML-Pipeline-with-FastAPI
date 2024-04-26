@@ -64,7 +64,7 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    preds = model.predict(x)
+    preds = model.predict(X)
     
     return preds
 
@@ -78,16 +78,15 @@ def save_model(model, path):
     path : str
         Path to save pickle file.
     """
-    file = open(path, 'wb')
-    pickle.dump(model, file)
-    file.close()
+    with open(path, 'wb') as pfile:
+    	pickle.dump(model, pfile)
+    pfile.close()
 
 def load_model(path):
     """ Loads pickle file from `path` and returns it."""
-    file = open(path, 'rb')
-    pfile = pickle.load(path)
-    file.close()
-    return pfile
+    with open(path, 'rb') as pfile: 
+        model = pickle.load(pfile)
+    return model
 
 
 def performance_on_categorical_slice(
@@ -137,3 +136,4 @@ def performance_on_categorical_slice(
     preds =  inference(model, X_slice)
     precision, recall, fbeta = compute_model_metrics(y_slice, preds)
     return precision, recall, fbeta
+
